@@ -36,7 +36,7 @@ quiz=[
     },
     {
         question:"'Incubation Period' is the time between?",
-        options:['Virus-infective','Virus-symptonms','Virus-complication','Virus-death'],
+        options:['Virus-infection','Virus-symptomns','Virus-complication','Virus-death'],
         answer:1
     },
     {
@@ -53,34 +53,94 @@ quiz=[
 ]
 const questionNumber= document.querySelector(".question-number");
 const questions= document.querySelector(".question");
-const options=document.querySelector(".option");
+const options=document.querySelector(".options");
+const contentbox=document.querySelector(".content-box");
+const resultbox=document.querySelector(".result-box");
 
-var countquestion=0;
+let alreadyattempted=[];
+let countquestion=0;
 let currentQuestion;
 let questionsDisplay=[];
+let correct=0;
+let wrong=0; 
 function getquestions(){
     const n=quiz.length;
     for(let i=0;i<n;i++){
         questionsDisplay.push(quiz[i]);
     }
 }
-function setquestions(){
+function setquestions(x=0){
+    resultbox.classList.add("hide");
+    countquestion+=x;
     questionNumber.innerHTML="Q"+(countquestion+1);
-    currentQuestion=questionsDisplay[countquestion].question;
-    questions.innerHTML=currentQuestion;
-    countquestion++;
-    console.log(currentQuestion);
+    currentQuestion=questionsDisplay[countquestion];
+    questions.innerHTML=currentQuestion.question;
+
+    
+    options.innerHTML=''; /*So that the options wont get stacked*/
+    let m=4,y=0;
+    for(let i=0;i<m;i++){   /*creating options for the particular question*/
+        const option=document.createElement("div");
+        option.innerHTML=currentQuestion.options[i];
+        option.id=i;
+        option.className="option";    
+        options.appendChild(option); /*Adding newly created option container into the options container*/       
+        option.setAttribute("onclick","result(this)");
+    }
+    
 }
-function next(){
-    if(countquestion==questionsDisplay.length){
-        console.log("Quiz over");
+function result(answered){
+    if(answered.id==currentQuestion.answer){
+        answered.classList.add("correct");
+        correct++;
     }
     else{
-        setquestions();
+        answered.classList.add("wrong");
+        wrong++;
+        for(let i=0;i<4;i++){
+            
+                if(options.children[i].id==currentQuestion.answer){
+                    options.children[i].classList.add("correct");
+                }
+            }
+    }
+    answerlimit();
+}
+function answerlimit(){
+    const x=4;
+    for(let i=0;i<x;i++){
+        options.children[i].classList.add("attempted-already");
+    }
+}
+function quizresult(){
+    resultbox.querySelector(".totalquestions").innerHTML=quiz.length;
+    resultbox.querySelector(".correct").innerHTML=correct;
+    resultbox.querySelector(".wrong").innerHTML=wrong;
+    resultbox.querySelector(".attempted").innerHTML=correct+wrong;
+    resultbox.querySelector(".score").innerHTML=correct;
+    resultbox.querySelector(".scorepercentage").innerHTML=(correct/(correct+wrong));
+}
+function quizover(){
+    resultbox.classList.remove("hide");
+    contentbox.classList.add("hide");
+    quizresult();
+}
+function next(){
+    if(countquestion+1==questionsDisplay.length){
+        console.log("Quiz over");
+        quizover();
+    }
+    else{
+        setquestions(1);
     }
 }
 function previous(){
-   
+   if(countquestion!=0){
+       setquestions(-1);
+   }
+   else{
+      console.log("Quiz just started");
+   }
 }
 window.onload=function(){
     getquestions();

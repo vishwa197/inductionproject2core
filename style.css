@@ -15,6 +15,17 @@ body{
     padding:25px;
     border-radius:10px;
 }
+.content-box.hide{
+    display:none;
+} 
+.result-box{
+    width: 650px;
+    text-align: center;
+    margin:40px auto;
+}
+.result-box.hide{
+    display:none;
+}
 .button{
     
     background-color: #8DDBE0;
@@ -45,13 +56,25 @@ body{
     border-radius: 5px;
     cursor: pointer;
 }
+.options .option.correct{
+    background-color: #8ED081;
+}
+.options .option.wrong{
+    background-color: #EB8A90;
+}
+.options .option.attempted-already{
+    pointer-events: none;
+}
 #table td{
     border:1px solid ;
-    padding:8px 15px;
+    padding:16px 15px;
     font-weight:500;
     
 }
 #table{
+    background-color: white;
     border-collapse: collapse;
     width:100%;
+    border-color: #cccccc;
+    margin:30px 0px;
 }
