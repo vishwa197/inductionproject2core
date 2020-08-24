@@ -47,7 +47,7 @@ quiz=[
     {
         question:"Which of the following people is COVID-19 more dangerous for? ",
         options:['European people','People with underlying health conditions','Children','Senior Citizens'],
-        answer:1
+        answer:3
     }
     
 ]
@@ -56,8 +56,9 @@ const questions= document.querySelector(".question");
 const options=document.querySelector(".options");
 const contentbox=document.querySelector(".content-box");
 const resultbox=document.querySelector(".result-box");
+const namebox=document.querySelector(".name");
 
-let alreadyattempted=[];
+
 let countquestion=0;
 let currentQuestion;
 let questionsDisplay=[];
@@ -69,14 +70,19 @@ function getquestions(){
         questionsDisplay.push(quiz[i]);
     }
 }
+
+contentbox.classList.add("hide");
 function setquestions(x=0){
     resultbox.classList.add("hide");
     countquestion+=x;
-    questionNumber.innerHTML="Q"+(countquestion+1);
-    currentQuestion=questionsDisplay[countquestion];
+    qnumber="Q"+(countquestion+1);
+    questionNumber.innerHTML=qnumber;
+    currentQuestion=questionsDisplay[Math.floor(Math.random()*questionsDisplay.length)];
     questions.innerHTML=currentQuestion.question;
-
+    const index=questionsDisplay.indexOf(currentQuestion);
+    questionsDisplay.splice(index,1)
     
+
     options.innerHTML=''; /*So that the options wont get stacked*/
     let m=4,y=0;
     for(let i=0;i<m;i++){   /*creating options for the particular question*/
@@ -89,6 +95,8 @@ function setquestions(x=0){
     }
     
 }
+
+
 function result(answered){
     if(answered.id==currentQuestion.answer){
         answered.classList.add("correct");
@@ -112,21 +120,46 @@ function answerlimit(){
         options.children[i].classList.add("attempted-already");
     }
 }
+
+function startquiz(){
+    contentbox.classList.remove("hide");
+    namebox.classList.add("hide");
+    welcome=document.getElementById("heading");
+    welcome.innerHTML="Welcome to the COVID-19 Quiz, "+name;
+    var timeLeft = 100;
+    time = document.getElementById('countdown');
+    var timerId = setInterval(countdown, 1000);
+    function countdown() {
+      if (timeLeft == -1) {
+        clearTimeout(timerId);
+        quizover();
+      } else {
+        time.innerHTML = ' Time remaining: '+timeLeft;
+        timeLeft--;
+      }
+    }
+}
+function writename(){
+    name =document.getElementById("quiz").value;   
+}
+writename();
 function quizresult(){
+    resultbox.querySelector(".name").innerHTML=name;
     resultbox.querySelector(".totalquestions").innerHTML=quiz.length;
     resultbox.querySelector(".correct").innerHTML=correct;
     resultbox.querySelector(".wrong").innerHTML=wrong;
     resultbox.querySelector(".attempted").innerHTML=correct+wrong;
     resultbox.querySelector(".score").innerHTML=correct;
-    resultbox.querySelector(".scorepercentage").innerHTML=(correct/(correct+wrong));
+    resultbox.querySelector(".scorepercentage").innerHTML=(correct/(quiz.length))*100+"%";
 }
 function quizover(){
     resultbox.classList.remove("hide");
     contentbox.classList.add("hide");
+    time.innerHTML="Time Out!";
     quizresult();
 }
 function next(){
-    if(countquestion+1==questionsDisplay.length){
+    if(countquestion+1==10){
         console.log("Quiz over");
         quizover();
     }
@@ -142,6 +175,7 @@ function previous(){
       console.log("Quiz just started");
    }
 }
+
 window.onload=function(){
     getquestions();
     setquestions();

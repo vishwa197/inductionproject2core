@@ -7,9 +7,23 @@
     <link href="style.css" rel="stylesheet">
 </head>
 <body>
-   <h1 id="heading">Welcome to the COVID-19 Quiz</h1>
-   <img src="coronavirus.png" alt="covid-19" style="float:left;">
-   <img src="face-mask.png" alt="face-mask" style="float:right;">
+    <h1 id="heading">Welcome to the COVID-19 Quiz</h1>
+    <p id="countdown"></p>
+    <div class="name">
+        <form>
+        Please enter your name to start the quiz:<br/><input type="text" id="quiz" placeholder="NAME"><br/>
+        <input class="button" type="button" value="Submit" onclick="writename();startquiz();">
+        </form>
+    <h2 style="text-align: center;font-weight: 400;"> Instructions:</h2>
+    <ul>
+        <li>Quiz consist of 10 questions with no negative marking.</li>
+        <li style="margin:15px 0px">Duration of the quiz is 100s. After which it gets automatically submitted.</li>
+        <li style="margin:15px 0px">In the end,A scoreboard is displayed based on your performance.</li>
+        <li>Type your name to start the quiz.</li>
+    </ul>
+    </div>
+   <img src="coronavirus.png" alt="covid-19" id="image1">
+   <img src="face-mask.png" alt="face-mask" id="image2">
    <div class="content-box">
        <div class="question-number">
        </div>
@@ -25,6 +39,10 @@
    <div class="result-box">
        <h2>ScoreBoard</h2>
        <table id="table">
+           <tr>
+               <td>Your Name:</td>
+               <td class="name"></td>
+           </tr>
            <tr>
                <td>Total Questions</td>
                <td class="totalquestions"></td>

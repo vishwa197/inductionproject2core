@@ -3,10 +3,35 @@ body{
     background-color: #70A9A1;
     font-family:'Montserrat',sans-serif;
 }
-
+*{
+    box-sizing: border-box;
+}
+.name{
+    width: 600px;
+    margin: 20px auto;
+}
+.name.hide{
+    display:none;
+}
 #heading{
     text-align: center;
-    font-weight: 350;
+    font-weight: 400;
+    background-color: #93D24B;
+    width:100%;
+}
+#countdown{
+    text-align:center;
+    font-weight: 600;
+}
+#image1{
+    position: absolute;
+    top:75px;
+    left:30px;
+}
+#image2{
+    position: absolute;
+    top:75px;
+    right:30px;
 }
 .content-box{
     width: 650px;
@@ -31,7 +56,7 @@ body{
     background-color: #8DDBE0;
     border-radius:5px;
     color:white;
-    padding:15px 35px;
+    padding:15px 30px;
     font-size: 15px;
     font-family:'Montserrat', sans-serif; /*button does not get affected by body properties*/
     cursor:pointer ;
@@ -77,4 +102,11 @@ body{
     width:100%;
     border-color: #cccccc;
     margin:30px 0px;
+}
+input[type=text]{
+    padding: 10px;
+    border:0;
+    box-shadow: 0 0 15px 4px rgba(0,0,0,0.25);
+    border-radius: 5px;
+    margin:15px 0px;
 }
