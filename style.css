@@ -61,6 +61,7 @@ body{
     font-family:'Montserrat', sans-serif; /*button does not get affected by body properties*/
     cursor:pointer ;
     border: 0px;
+    display: inline-block;
 }
 .question-number{
     color:#009688;
@@ -93,8 +94,7 @@ body{
 #table td{
     border:1px solid ;
     padding:16px 15px;
-    font-weight:500;
-    
+    font-weight:500;  
 }
 #table{
     background-color: white;
@@ -109,4 +109,15 @@ input[type=text]{
     box-shadow: 0 0 15px 4px rgba(0,0,0,0.25);
     border-radius: 5px;
     margin:15px 0px;
+}
+.content-box .nav-bar{
+    border-top:1px solid #cccccc;
+}
+.content-box .nav-bar div{
+    margin:3px;
+    height:30px;
+    width:40px;
+    display: inline-block;
+    background-color: #cccccc;
+
 }
