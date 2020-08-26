@@ -11,7 +11,7 @@
     <p id="countdown"></p>
     <div class="name">
         <form>
-        Please enter your name to start the quiz:<br/><input type="text" id="quiz" placeholder="NAME"><br/>
+        Please enter your name to start the quiz:<br/><input type="text" id="quiz" placeholder="NAME" name="name"><br/>
         <input class="button" type="button" value="Submit" onclick="writename();startquiz();">
         </form>
     <h2 style="text-align: center;font-weight: 400;"> Instructions:</h2>
@@ -27,8 +27,9 @@
    <div class="content-box">
      <div class="question-number">
        </div>
-       <div class="nav-bar">
-    </div>
+     <div id="status"></div>  
+    <!----   <div class="nav-bar">
+    </div>---->
    <div class="question">
     </div>
    <div class="options">
@@ -63,12 +64,12 @@
                <td class="wrong"></td>
            </tr>
            <tr>
-               <td>Score</td>
+               <td>Your Score</td>
                <td class="score"></td>
            </tr>
            <tr>
-               <td>Score percentage</td>
-               <td class="scorepercentage"></td>
+               <td>High Score</td>
+               <td class="highscore"></td>
            </tr>
        </table>
    </div>

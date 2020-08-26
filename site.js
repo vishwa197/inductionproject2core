@@ -73,17 +73,20 @@ function getquestions(){
 }
 var attempt={};
 var attempted={};
+var wronged={};
+var corrected={};
+var user={};
 contentbox.classList.add("hide");
+yours=document.getElementById("status");
 function setquestions(x=0){
     resultbox.classList.add("hide");
     countquestion+=x;
     questionNumber.innerHTML="Q"+(countquestion+1);
     if(attempt.hasOwnProperty(countquestion)){
-        console.log(countquestion);
         currentQuestion=attempt[countquestion];
         questions.innerHTML=currentQuestion.question;
 
-        
+
         options.innerHTML=''; /*So that the options wont get stacked*/
     let m=4;
     for(let i=0;i<m;i++){   /*creating options for the particular question*/
@@ -94,8 +97,18 @@ function setquestions(x=0){
         options.appendChild(option);
         if(attempted[countquestion]){
             options.children[i].classList.add("attempted-already");
+            if(wronged[countquestion]){
+                yours.innerHTML="Status:Wrong|Your Response: "+(parseInt(user[countquestion])+1); 
+            }
+            else if(corrected[countquestion]){
+                yours.innerHTML="Status:Correct Response!";
+            }
+            if(options.children[i].id==currentQuestion.answer){
+                options.children[i].classList.add("correct");
+            }
         }
         else{
+            yours.innerHTML="Status:Unattempted";
             option.setAttribute("onclick","result(this)");
         }
     }
@@ -104,10 +117,9 @@ function setquestions(x=0){
     else{
     currentQuestion=questionsDisplay[Math.floor(Math.random()*questionsDisplay.length)];
     attempt[countquestion]=currentQuestion;
-    console.log(attempt);
     questions.innerHTML=currentQuestion.question;
     const index=questionsDisplay.indexOf(currentQuestion);
-    questionsDisplay.splice(index,1)
+    questionsDisplay.splice(index,1);
     
 
     options.innerHTML=''; /*So that the options wont get stacked*/
@@ -123,15 +135,19 @@ function setquestions(x=0){
     
 }
 
-
+var q=0;
 function result(answered){
+    q=answered.id;
+    user[countquestion]=q;
     if(answered.id==currentQuestion.answer){
         answered.classList.add("correct");
         correct++;
+        corrected[countquestion]=true;
     }
     else{
         answered.classList.add("wrong");
         wrong++;
+        wronged[countquestion]=true;
         for(let i=0;i<4;i++){
             
                 if(options.children[i].id==currentQuestion.answer){
@@ -151,7 +167,7 @@ function answerlimit(){
     }
 }
 var o=0;
-var timeLeft=100;
+var timeLeft=150;
 function startquiz(){
     contentbox.classList.remove("hide");
     namebox.classList.add("hide");
@@ -160,7 +176,7 @@ function startquiz(){
     time = document.getElementById('countdown');
     var timerId = setInterval(countdown, 1000);
     function countdown() {
-      if (timeLeft == -100000 ) {
+      if (timeLeft == -1 ) {
         clearTimeout(timerId);
         quizover();
       } else if(o!=1){
@@ -169,59 +185,11 @@ function startquiz(){
       }
     }
 }
-function writename(){
-    name =document.getElementById("quiz").value;
-    localStorage.setItem("name",name);   
-}
-writename();
 
-function quizresult(){
-    resultbox.querySelector(".name").innerHTML=name;
-    resultbox.querySelector(".totalquestions").innerHTML=quiz.length;
-    resultbox.querySelector(".correct").innerHTML=correct;
-    resultbox.querySelector(".wrong").innerHTML=wrong;
-    resultbox.querySelector(".attempted").innerHTML=correct+wrong;
-    resultbox.querySelector(".score").innerHTML=correct;
-    resultbox.querySelector(".scorepercentage").innerHTML=(correct/(quiz.length))*100+"%";
-}
-function quizover(){
-    o++;
-    localStorage.setItem("timeLeft",timeLeft);
-    resultbox.classList.remove("hide");
-    contentbox.classList.add("hide");
-    console.log(timeLeft);
-    if(timeLeft==-1){
-        time.innerHTML="Time Out!";
-    }
-    quizresult();
-}
-function navbar(){
-    const totalquestions=quiz.length;
-    for(let i=0;i<totalquestions;i++){
-        const nav=document.createElement("div");
-        navbarbox.appendChild(nav);
-    }
-}
-
-function next(){
-    if(countquestion+1==10){
-        quizover();
-    }
-    else{
-        setquestions(1);
-    }
-}
-function previous(){
-   if(countquestion!=0){
-       setquestions(-1);
-   }
-   else{
-      console.log("Quiz just started");
-   }
-}
 c=parseInt(localStorage.getItem("correct"));
 w=parseInt(localStorage.getItem("wrong"));
 t=parseInt(localStorage.getItem("timeLeft"));
+timetaken=150-t;
 console.log(c);
 var score1=0;
 var score2=0;
@@ -245,16 +213,85 @@ var score2=0;
         default:
             score1=0;            
     }
-score2=(score1/(Math.sqrt(t)))*10;
-console.log(score2);    
+score2=(score1/(timetaken))*10;   
 window.localStorage.time = new Date().getTime();
 var date = new Date(parseInt(window.localStorage.time));
 console.log(date);
+mark=score2;
+/*var highscorer=localStorage.setItem("highscorer",name);
+var highscoredate=localStorage.setItem("highscoredate",date);
+var highscore=localStorage.setItem("highscore",correct);*/
+highscorer=localStorage.getItem("highscorer");
+highscore=localStorage.getItem("highscore");
+highscoredate=localStorage.getItem("highscoredate");
+    if (score2 > highscore) {
+        localStorage.setItem("highscore", score2); 
+        localStorage.setItem("highscorer", name);
+        localStorage.setItem("highscoredate", date);
+    }
+
+
+
+function writename(){
+    name=document.getElementById("quiz").value;
+}
+writename();
+
+function quizresult(){
+    resultbox.querySelector(".name").innerHTML=name;
+    resultbox.querySelector(".totalquestions").innerHTML=quiz.length;
+    resultbox.querySelector(".correct").innerHTML=correct;
+    resultbox.querySelector(".wrong").innerHTML=wrong;
+    resultbox.querySelector(".attempted").innerHTML=correct+wrong;
+    resultbox.querySelector(".score").innerHTML=mark;
+    resultbox.querySelector(".highscore").innerHTML=highscore+" by examinee "+highscorer+" on "+highscoredate;
+}
+function quizover(){
+    o++;
+    localStorage.setItem("timeLeft",timeLeft);
+    resultbox.classList.remove("hide");
+    contentbox.classList.add("hide");
+    console.log(timeLeft);
+    if(timeLeft==-1){
+        time.innerHTML="Time Out!";
+    }
+    quizresult();
+}
+/*function navbar(){
+    const totalquestions=quiz.length;
+    for(let i=0;i<totalquestions;i++){
+        const nav=document.createElement("div");
+        navbarbox.appendChild(nav);
+    }
+}*/
+
+function next(){
+    if(countquestion+1==10){
+        quizover();
+    }
+    else{
+        yours.innerHTML="";
+        setquestions(1);
+    }
+}
+function previous(){
+   if(countquestion!=0){
+    yours.innerHTML="";
+       setquestions(-1);
+   }
+   else{
+      console.log("Quiz just started");
+   }
+}
+
+
+
+
 
 window.onload=function(){
     getquestions();
     setquestions();
-    navbar();
+    //navbar();
 }
 console.log(localStorage);
 
