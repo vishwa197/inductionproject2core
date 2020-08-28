@@ -1,14 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&display=swap');
 body{
-    background-color: #70A9A1;
+    background-image:linear-gradient(#70A9A1,#ccffcc);
     font-family:'Montserrat',sans-serif;
 }
 *{
     box-sizing: border-box;
 }
 .name{
-    width: 600px;
-    margin: 20px auto;
+    width: 700px;
+    margin: 40px auto;
+    background-image:linear-gradient(#c2d6d6,white);
+    background-color:#ccffcc;
+    padding: 15px;
+    border-radius: 5px;
+}
+.name:hover{
+    box-shadow:0px 0px 10px#ff6600;
 }
 .name.hide{
     display:none;
@@ -16,22 +23,22 @@ body{
 #heading{
     text-align: center;
     font-weight: 400;
-    background-color: #93D24B;
-    width:100%;
+    text-shadow: 1px 1px 3px grey;
 }
+
 #countdown{
     text-align:center;
     font-weight: 600;
 }
 #image1{
     position: absolute;
-    top:75px;
+    top:100px;
     left:30px;
 }
 #image2{
     position: absolute;
-    top:75px;
-    right:30px;
+    top:100px;
+    right:40px;
 }
 .content-box{
     width: 650px;
@@ -52,16 +59,18 @@ body{
     display:none;
 }
 .button{
-    
     background-color: #8DDBE0;
     border-radius:5px;
     color:white;
     padding:15px 30px;
     font-size: 15px;
     font-family:'Montserrat', sans-serif; /*button does not get affected by body properties*/
-    cursor:pointer ;
+    cursor:pointer;
     border: 0px;
     display: inline-block;
+}
+.button:hover{
+    box-shadow: 0px 0px 5px grey;
 }
 .question-number{
     color:#009688;
@@ -70,7 +79,10 @@ body{
 }
 #status{
     display: inline;
-    margin-left: 270px;
+    margin-left: 280px;
+    font-weight: 500;
+    color: #E4572E;
+    border-bottom: 1px solid #E4572E;
 }
 .question{
     line-height: 22px;
@@ -84,6 +96,9 @@ body{
     margin-bottom: 20px;
     border-radius: 5px;
     cursor: pointer;
+}
+.option:hover{
+    background-color: grey;
 }
 .options .option.correct{
     background-color: #8ED081;
@@ -113,14 +128,27 @@ input[type=text]{
     border-radius: 5px;
     margin:15px 0px;
 }
-.content-box .nav-bar{
-    border-top:1px solid #cccccc;
+.content-box .navbar{
+    position: absolute;
+    top:140px;
+    right:260px;
 }
-.content-box .nav-bar div{
-    margin:3px;
+.content-box .navbar div{
+    text-align: center;
+    color: #F1F2EB;
+    margin:2px;
     height:30px;
     width:40px;
-    display: inline-block;
-    background-color: #cccccc;
-
+    background-color: #95A3B3;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.content-box .navbar div:hover{
+    background-color: grey;
+}
+.navbutton.correct{
+    background-color:#8ED081;   
+}
+.navbutton.wrong{
+    background-color: #EB8A90;
 }

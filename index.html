@@ -14,11 +14,14 @@
         Please enter your name to start the quiz:<br/><input type="text" id="quiz" placeholder="NAME" name="name"><br/>
         <input class="button" type="button" value="Submit" onclick="writename();startquiz();">
         </form>
-    <h2 style="text-align: center;font-weight: 400;"> Instructions:</h2>
+        
+    <h2 style="text-align: center;font-weight: 400;padding-top:5px; border-top:1px solid #70A9A1"> Instructions:</h2>
     <ul>
-        <li>Quiz consist of 10 questions with no negative marking.</li>
-        <li style="margin:15px 0px">Duration of the quiz is 100s. After which it gets automatically submitted.</li>
+        <li>Quiz consist of 10 questions and you can navigate with previous and next buttons.</li>
+        <li style="margin:15px 0px">Duration of the quiz is 150s. After which it gets automatically submitted.</li>
         <li style="margin:15px 0px">In the end,A scoreboard is displayed based on your performance.</li>
+        <li style="margin:15px 0px">Performance is decided by the number of wrong and correct question along with total timetaken.Attempt accordingly</li>
+        <li style="margin:15px 0px">Highest score of all attempted users are displayed.If you got the highest score it will be displayed in the scoreboard only after the website is reloaded.</li>
         <li>Type your name to start the quiz.</li>
     </ul>
     </div>
@@ -27,17 +30,29 @@
    <div class="content-box">
      <div class="question-number">
        </div>
-     <div id="status"></div>  
-    <!----   <div class="nav-bar">
-    </div>---->
+     <div id="status"></div>
+     <hr style="color: grey">  
    <div class="question">
     </div>
    <div class="options">
           </div>
-   <div>
+   <div> 
        <button type="button" class="button" onclick="next()">Next</button>
        <button type="button" class="button" onclick="previous()">Previous</button>
    </div>
+   <div class="navbar">
+       <div class="navbutton" onclick="nav(1)">1</div>
+       <div class="navbutton" onclick="nav(2)">2</div>
+       <div class="navbutton" onclick="nav(3)">3</div>
+       <div class="navbutton" onclick="nav(4)">4</div>
+       <div class="navbutton" onclick="nav(5)">5</div>
+       <div class="navbutton" onclick="nav(6)">6</div>
+       <div class="navbutton" onclick="nav(7)">7</div>
+       <div class="navbutton" onclick="nav(8)">8</div>
+       <div class="navbutton" onclick="nav(9)">9</div>
+       <div class="navbutton" onclick="nav(10)">10</div>
+</div>
+
    </div>
 
    <div class="result-box">
@@ -45,7 +60,7 @@
        <table id="table">
            <tr>
                <td>Your Name:</td>
-               <td class="name"></td>
+               <td class="examinee"></td>
            </tr>
            <tr>
                <td>Total Questions</td>

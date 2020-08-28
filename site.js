@@ -57,8 +57,7 @@ const options=document.querySelector(".options");
 const contentbox=document.querySelector(".content-box");
 const resultbox=document.querySelector(".result-box");
 const namebox=document.querySelector(".name");
-const navbarbox=document.querySelector(".nav-bar");
-
+const navbarbox=document.querySelector(".navbar")
 
 let countquestion=0;
 let currentQuestion;
@@ -78,6 +77,8 @@ var corrected={};
 var user={};
 contentbox.classList.add("hide");
 yours=document.getElementById("status");
+
+
 function setquestions(x=0){
     resultbox.classList.add("hide");
     countquestion+=x;
@@ -131,11 +132,19 @@ function setquestions(x=0){
         option.className="option";    
         options.appendChild(option); /*Adding newly created option container into the options container*/       
         option.setAttribute("onclick","result(this)");
-    }}
-    
+    }}   
 }
 
 var q=0;
+l=document.getElementsByClassName("navbutton");
+function navindicator(num,test){
+    if(test){
+        l[num].style.backgroundColor="#8ED081";
+    }
+    else{
+        l[num].style.backgroundColor="#EB8A90";
+    }
+}
 function result(answered){
     q=answered.id;
     user[countquestion]=q;
@@ -143,11 +152,13 @@ function result(answered){
         answered.classList.add("correct");
         correct++;
         corrected[countquestion]=true;
+        navindicator(countquestion,1);
     }
     else{
         answered.classList.add("wrong");
         wrong++;
         wronged[countquestion]=true;
+        navindicator(countquestion,0);
         for(let i=0;i<4;i++){
             
                 if(options.children[i].id==currentQuestion.answer){
@@ -156,8 +167,6 @@ function result(answered){
             }
     }
     attempted[countquestion]=true;
-    localStorage.setItem("correct",correct);
-    localStorage.setItem("wrong",wrong);
     answerlimit();
 }
 function answerlimit(){
@@ -166,6 +175,7 @@ function answerlimit(){
         options.children[i].classList.add("attempted-already");
     }
 }
+
 var o=0;
 var timeLeft=150;
 function startquiz(){
@@ -185,15 +195,11 @@ function startquiz(){
       }
     }
 }
-
-c=parseInt(localStorage.getItem("correct"));
-w=parseInt(localStorage.getItem("wrong"));
-t=parseInt(localStorage.getItem("timeLeft"));
-timetaken=150-t;
-console.log(c);
-var score1=0;
 var score2=0;
-    switch(c-w){
+function scorecalc(){
+timetaken=150-timeLeft;
+score1=0;
+    switch(correct-wrong){
         case 10:
         score1=9.5;break;    
         case 9:
@@ -215,59 +221,64 @@ var score2=0;
     }
 score2=(score1/(timetaken))*10;   
 window.localStorage.time = new Date().getTime();
-var date = new Date(parseInt(window.localStorage.time));
-console.log(date);
-mark=score2;
+date = new Date(parseInt(window.localStorage.time));
+
 /*var highscorer=localStorage.setItem("highscorer",name);
 var highscoredate=localStorage.setItem("highscoredate",date);
-var highscore=localStorage.setItem("highscore",correct);*/
+var highscore=localStorage.setItem("highscore",wrong);*/
+
 highscorer=localStorage.getItem("highscorer");
 highscore=localStorage.getItem("highscore");
 highscoredate=localStorage.getItem("highscoredate");
+if(highscore !== null){      //For the first examinee
     if (score2 > highscore) {
         localStorage.setItem("highscore", score2); 
         localStorage.setItem("highscorer", name);
         localStorage.setItem("highscoredate", date);
     }
-
-
-
+}
+else{
+        localStorage.setItem("highscore", score2); 
+        localStorage.setItem("highscorer", name);
+        localStorage.setItem("highscoredate", date);
+}
+}
 function writename(){
     name=document.getElementById("quiz").value;
 }
 writename();
 
 function quizresult(){
-    resultbox.querySelector(".name").innerHTML=name;
+    resultbox.querySelector(".examinee").innerHTML=name;
     resultbox.querySelector(".totalquestions").innerHTML=quiz.length;
     resultbox.querySelector(".correct").innerHTML=correct;
     resultbox.querySelector(".wrong").innerHTML=wrong;
     resultbox.querySelector(".attempted").innerHTML=correct+wrong;
-    resultbox.querySelector(".score").innerHTML=mark;
-    resultbox.querySelector(".highscore").innerHTML=highscore+" by examinee "+highscorer+" on "+highscoredate;
+    resultbox.querySelector(".score").innerHTML=score2;
+    resultbox.querySelector(".highscore").innerHTML=highscore+"  by "+highscorer+" on  "+highscoredate;
 }
 function quizover(){
     o++;
     localStorage.setItem("timeLeft",timeLeft);
     resultbox.classList.remove("hide");
     contentbox.classList.add("hide");
-    console.log(timeLeft);
     if(timeLeft==-1){
         time.innerHTML="Time Out!";
     }
+    scorecalc();
     quizresult();
 }
-/*function navbar(){
-    const totalquestions=quiz.length;
-    for(let i=0;i<totalquestions;i++){
-        const nav=document.createElement("div");
-        navbarbox.appendChild(nav);
-    }
-}*/
+
 
 function next(){
     if(countquestion+1==10){
         quizover();
+    }
+    else if(countquestion+1==9){
+        y=document.getElementsByClassName("button");
+        y[1].innerText="Submit?";
+        yours.innerHTML="";
+        setquestions(1);
     }
     else{
         yours.innerHTML="";
@@ -276,6 +287,8 @@ function next(){
 }
 function previous(){
    if(countquestion!=0){
+    y=document.getElementsByClassName("button");
+    y[1].innerText="Next";
     yours.innerHTML="";
        setquestions(-1);
    }
@@ -284,14 +297,15 @@ function previous(){
    }
 }
 
-
-
-
+function nav(lol){
+    z=lol-countquestion-1;
+    setquestions(z);
+}
 
 window.onload=function(){
     getquestions();
     setquestions();
-    //navbar();
+
 }
 console.log(localStorage);
 
