@@ -48,7 +48,7 @@ quiz=[
         question:"Which of the following people is COVID-19 more dangerous for? ",
         options:['European people','People with underlying health conditions','Children','Senior Citizens'],
         answer:3
-    }
+    }    //Storing questions ,options and answers using array of objects
     
 ]
 const questionNumber= document.querySelector(".question-number");
@@ -58,13 +58,15 @@ const contentbox=document.querySelector(".content-box");
 const resultbox=document.querySelector(".result-box");
 const namebox=document.querySelector(".name");
 const navbarbox=document.querySelector(".navbar")
+const previousbox=document.querySelector(".previous") 
+//Allows entering and modifying child elements in the parent element
 
 let countquestion=0;
 let currentQuestion;
 let questionsDisplay=[];
 let correct=0;
 let wrong=0; 
-function getquestions(){
+function getquestions(){    //function to copy the objects in a new array(questionsDisplay), so that original object array "quiz" is not disturbed 
     const n=quiz.length;
     for(let i=0;i<n;i++){
         questionsDisplay.push(quiz[i]);
@@ -75,28 +77,43 @@ var attempted={};
 var wronged={};
 var corrected={};
 var user={};
-contentbox.classList.add("hide");
-yours=document.getElementById("status");
+contentbox.classList.add("hide");   //Using classlist we can add and remove a class when required
+yours=document.getElementById("status"); //Question status
 
-
-function setquestions(x=0){
+function setquestions(x=0){     //function to display the content of the questions
+    countquestion+=x;           //x is a global variable to navigate to the correct question number
     resultbox.classList.add("hide");
-    countquestion+=x;
-    questionNumber.innerHTML="Q"+(countquestion+1);
-    if(attempt.hasOwnProperty(countquestion)){
+    if(countquestion+1==quiz.length){   //Modifies next to submit for the last question
+        y=document.getElementsByClassName("button");
+        y[1].style.backgroundColor="red";
+        y[1].innerText="Submit?";
+    }
+    else{
+    y=document.getElementsByClassName("button");
+    y[1].style.backgroundColor="#8DDBE0";
+    y[1].innerText="Next";
+    }
+    if(countquestion==0){               //previous button disabled for first question
+        previousbox.classList.add("attempted-already");
+    } 
+    else{
+        previousbox.classList.remove("attempted-already");
+    }
+    questionNumber.innerHTML="Q"+(countquestion+1); 
+    if(attempt.hasOwnProperty(countquestion)){   //for attempted questions
         currentQuestion=attempt[countquestion];
         questions.innerHTML=currentQuestion.question;
 
 
         options.innerHTML=''; /*So that the options wont get stacked*/
     let m=4;
-    for(let i=0;i<m;i++){   /*creating options for the particular question*/
+    for(let i=0;i<m;i++){   //creating options for the particular question in the content box container
         const option=document.createElement("div");
         option.innerHTML=currentQuestion.options[i];
         option.id=i;
         option.className="option";    
-        options.appendChild(option);
-        if(attempted[countquestion]){
+        options.appendChild(option);   
+        if(attempted[countquestion]){       
             options.children[i].classList.add("attempted-already");
             if(wronged[countquestion]){
                 yours.innerHTML="Status:Wrong|Your Response: "+(parseInt(user[countquestion])+1); 
@@ -110,17 +127,17 @@ function setquestions(x=0){
         }
         else{
             yours.innerHTML="Status:Unattempted";
-            option.setAttribute("onclick","result(this)");
+            option.setAttribute("onclick","result(this)");      // func(this) allows us to get the clickec option and modify it
         }
     }
    
 }
-    else{
-    currentQuestion=questionsDisplay[Math.floor(Math.random()*questionsDisplay.length)];
+    else{               //for displaying unattempted questions
+    currentQuestion=questionsDisplay[Math.floor(Math.random()*questionsDisplay.length)]; //Random question order display for every user
     attempt[countquestion]=currentQuestion;
     questions.innerHTML=currentQuestion.question;
     const index=questionsDisplay.indexOf(currentQuestion);
-    questionsDisplay.splice(index,1);
+    questionsDisplay.splice(index,1);       //To remove the displayed question from the array of questions so that it wont repeat again
     
 
     options.innerHTML=''; /*So that the options wont get stacked*/
@@ -137,7 +154,7 @@ function setquestions(x=0){
 
 var q=0;
 l=document.getElementsByClassName("navbutton");
-function navindicator(num,test){
+function navindicator(num,test){        //To indicate the color of navbars according to the status 
     if(test){
         l[num].style.backgroundColor="#8ED081";
     }
@@ -145,7 +162,8 @@ function navindicator(num,test){
         l[num].style.backgroundColor="#EB8A90";
     }
 }
-function result(answered){
+
+function result(answered){    //Checking the attempted answer
     q=answered.id;
     user[countquestion]=q;
     if(answered.id==currentQuestion.answer){
@@ -159,7 +177,7 @@ function result(answered){
         wrong++;
         wronged[countquestion]=true;
         navindicator(countquestion,0);
-        for(let i=0;i<4;i++){
+        for(let i=0;i<4;i++){  //If attempted answer is wrong,correct options is indicated
             
                 if(options.children[i].id==currentQuestion.answer){
                     options.children[i].classList.add("correct");
@@ -169,7 +187,7 @@ function result(answered){
     attempted[countquestion]=true;
     answerlimit();
 }
-function answerlimit(){
+function answerlimit(){                 //To ensure Question can't be answered again
     const x=4;
     for(let i=0;i<x;i++){
         options.children[i].classList.add("attempted-already");
@@ -177,15 +195,15 @@ function answerlimit(){
 }
 
 var o=0;
-var timeLeft=150;
-function startquiz(){
+var timeLeft=200;
+function startquiz(){               //starts the quiz after inptuing the name
     contentbox.classList.remove("hide");
     namebox.classList.add("hide");
     welcome=document.getElementById("heading");
     welcome.innerHTML="Welcome to the COVID-19 Quiz, "+name;
     time = document.getElementById('countdown');
     var timerId = setInterval(countdown, 1000);
-    function countdown() {
+    function countdown() {          //Starts countdown timer and finishes the test when it runs out
       if (timeLeft == -1 ) {
         clearTimeout(timerId);
         quizover();
@@ -196,8 +214,8 @@ function startquiz(){
     }
 }
 var score2=0;
-function scorecalc(){
-timetaken=150-timeLeft;
+function scorecalc(){               //Very basic scoring algorithm using correct,wrong and timetaken
+timetaken=200-timeLeft;
 score1=0;
     switch(correct-wrong){
         case 10:
@@ -221,13 +239,13 @@ score1=0;
     }
 score2=(score1/(timetaken))*10;   
 window.localStorage.time = new Date().getTime();
-date = new Date(parseInt(window.localStorage.time));
+date = new Date(parseInt(window.localStorage.time));        //Getting the attempted date and time  
 
 /*var highscorer=localStorage.setItem("highscorer",name);
 var highscoredate=localStorage.setItem("highscoredate",date);
 var highscore=localStorage.setItem("highscore",wrong);*/
 
-highscorer=localStorage.getItem("highscorer");
+highscorer=localStorage.getItem("highscorer");  //to store the highscore in the localstorage and display it 
 highscore=localStorage.getItem("highscore");
 highscoredate=localStorage.getItem("highscoredate");
 if(highscore !== null){      //For the first examinee
@@ -235,29 +253,31 @@ if(highscore !== null){      //For the first examinee
         localStorage.setItem("highscore", score2); 
         localStorage.setItem("highscorer", name);
         localStorage.setItem("highscoredate", date);
+        document.getElementById("congrats").innerText="Congrats on the highscore!, the highscore will be updated on reloading";
     }
 }
 else{
         localStorage.setItem("highscore", score2); 
         localStorage.setItem("highscorer", name);
         localStorage.setItem("highscoredate", date);
+        document.getElementById("congrats").innerText="Congrats on the highscore!, the highscore will be updated on reloading";
 }
 }
-function writename(){
+function writename(){               //to get the inputted name
     name=document.getElementById("quiz").value;
 }
 writename();
 
-function quizresult(){
+function quizresult(){              //To display details and performance of examinee in the resultbox
     resultbox.querySelector(".examinee").innerHTML=name;
-    resultbox.querySelector(".totalquestions").innerHTML=quiz.length;
+    resultbox.querySelector(".attempted").innerHTML=correct+wrong+"/"+quiz.length;
     resultbox.querySelector(".correct").innerHTML=correct;
     resultbox.querySelector(".wrong").innerHTML=wrong;
-    resultbox.querySelector(".attempted").innerHTML=correct+wrong;
+    resultbox.querySelector(".timetaken").innerHTML=timetaken-1;
     resultbox.querySelector(".score").innerHTML=score2;
     resultbox.querySelector(".highscore").innerHTML=highscore+"  by "+highscorer+" on  "+highscoredate;
 }
-function quizover(){
+function quizover(){        //Finishing quiz to display result
     o++;
     localStorage.setItem("timeLeft",timeLeft);
     resultbox.classList.remove("hide");
@@ -271,41 +291,33 @@ function quizover(){
 
 
 function next(){
+    contentbox.classList.remove("next");
     if(countquestion+1==10){
         quizover();
     }
-    else if(countquestion+1==9){
-        y=document.getElementsByClassName("button");
-        y[1].innerText="Submit?";
-        yours.innerHTML="";
-        setquestions(1);
-    }
+    
     else{
         yours.innerHTML="";
         setquestions(1);
+        contentbox.classList.add("next");
     }
-}
+}                                    //Next and previous button navigation
 function previous(){
+    contentbox.classList.remove("next");
    if(countquestion!=0){
-    y=document.getElementsByClassName("button");
-    y[1].innerText="Next";
-    yours.innerHTML="";
        setquestions(-1);
-   }
-   else{
-      console.log("Quiz just started");
+       contentbox.classList.add("previous");
    }
 }
 
 function nav(lol){
-    z=lol-countquestion-1;
+    z=lol-countquestion-1;   //Helps navigating to any question
     setquestions(z);
 }
 
-window.onload=function(){
+window.onload=function(){    //Runs the function when the page is reloaded.
     getquestions();
     setquestions();
-
 }
 console.log(localStorage);
 
