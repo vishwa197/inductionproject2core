@@ -154,6 +154,15 @@ body{
 .previous.attempted-already{
     pointer-events: none;
 }
+@keyframes color_change {
+    0% {color:#ff5500;}
+    50% {color:#39e600;}
+    100% {color:#008ae6;}
+}
+#congrats{
+    font-weight: 550;
+    animation: color_change 2s infinite;
+}
 #table td{
     border:1px solid ;
     padding:16px 15px;

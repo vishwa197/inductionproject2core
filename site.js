@@ -217,7 +217,7 @@ var score2=0;
 function scorecalc(){               //Very basic scoring algorithm using correct,wrong and timetaken
 timetaken=200-timeLeft;
 score1=0;
-    switch(correct-wrong){
+    switch(correct-Math.round(wrong/2)){
         case 10:
         score1=9.5;break;    
         case 9:
@@ -240,7 +240,8 @@ score1=0;
 score2=(score1/(timetaken))*10;   
 window.localStorage.time = new Date().getTime();
 date = new Date(parseInt(window.localStorage.time));        //Getting the attempted date and time  
-
+if(correct-wrong>=5){
+}
 /*var highscorer=localStorage.setItem("highscorer",name);
 var highscoredate=localStorage.setItem("highscoredate",date);
 var highscore=localStorage.setItem("highscore",wrong);*/
@@ -253,14 +254,14 @@ if(highscore !== null){      //For the first examinee
         localStorage.setItem("highscore", score2); 
         localStorage.setItem("highscorer", name);
         localStorage.setItem("highscoredate", date);
-        document.getElementById("congrats").innerText="Congrats on the highscore!, the highscore will be updated on reloading";
+        document.getElementById("congrats").innerText="Congrats on the highscore! Your highscore will be updated on reloading.";       
     }
 }
 else{
         localStorage.setItem("highscore", score2); 
         localStorage.setItem("highscorer", name);
         localStorage.setItem("highscoredate", date);
-        document.getElementById("congrats").innerText="Congrats on the highscore!, the highscore will be updated on reloading";
+        document.getElementById("congrats").innerText="Congrats on the highscore!, the highscore will be updated on reloading.";
 }
 }
 function writename(){               //to get the inputted name
